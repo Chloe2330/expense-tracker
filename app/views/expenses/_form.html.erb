@@ -1,0 +1,36 @@
+<%= form_with model: @expense do |form| %>
+    <% if @expense.errors.any? %>
+        <div class="error-messages">
+            <h2><%= pluralize(@expense.errors.count, "error") %> prevented this expense from being saved:</h2>
+            <ul>
+                <% @expense.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <div>
+      <%= form.label :description %>
+      <%= form.text_field :description %>
+    </div>
+  
+    <div>
+      <%= form.label :amount, "Amount" %>
+      <%= form.number_field :amount, step: 0.01, placeholder: "Enter amount" %>
+    </div>
+  
+    <div>
+      <%= form.label :expense_date, "Expense Date" %>
+      <%= form.date_select :expense_date %>
+    </div>
+  
+    <div>
+      <%= form.label :category_id, "Category" %>
+      <%= form.select :category_id, Category.pluck(:name, :id), prompt: "Select a category" %>
+    </div>
+  
+    <div>
+      <%= form.submit %>
+    </div>
+<% end %>

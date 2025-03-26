@@ -1,0 +1,5 @@
+<h1><%= "Expense #{@expense.id}" %></h1>
+
+<%= link_to "Back", expenses_path %>
+<%= link_to "Edit", edit_expense_path(@expense) %>
+<%= button_to "Delete", @expense, method: :delete, data: { turbo_confirm: "Are you sure?" } %>
