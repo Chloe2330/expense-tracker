@@ -2,15 +2,15 @@ class ExpensesController < ApplicationController
   before_action :set_expense, only: %i[ show edit update destroy ]
 
   def index
-    @expenses = Expense.all 
+    @expenses = Expense.all
   end
 
   def show
   end
 
-  def new 
-    @expense = Expense.new 
-  end 
+  def new
+    @expense = Expense.new
+  end
 
   def create
     @expense = Expense.new(expense_params)
@@ -42,7 +42,7 @@ class ExpensesController < ApplicationController
       @expense = Expense.find(params[:id])
     end
 
-  private 
+  private
     def expense_params
       params.require(:expense).permit(:description, :amount, :expense_date, :category_id)
     end
