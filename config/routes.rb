@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "expenses#index"
   resources :expenses
+  resources :categories
 end

@@ -1,0 +1,4 @@
+<h1><%= @category.name %></h1>
+<%= @category.description.presence || "No description added." %>
+
+<%= link_to "Back", expenses_path %>
