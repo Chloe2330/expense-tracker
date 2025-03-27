@@ -45,22 +45,48 @@ class ExpensesController < ApplicationController
   def report
     @categories = Category.all
 
-    # Filtering logic
-    @expenses = Expense.all
-    @expenses = @expenses.where("expense_date >= ?", params[:start_date]) if params[:start_date].present?
-    @expenses = @expenses.where("expense_date <= ?", params[:end_date]) if params[:end_date].present?
-    @expenses = @expenses.where(category_id: params[:category_id]) if params[:category_id].present?
+    # Base SQL query
+    sql = "SELECT * FROM expenses WHERE 1=1"
+    query_params = []
 
-    # Calculate statistics
-    total_expenses = @expenses.sum(:amount)
-    average_expense = @expenses.average(:amount) || 0
-    total_count = @expenses.count
+    # Filtering logic with prepared statements
+    if params[:start_date].present?
+      sql += " AND expense_date >= ?"
+      query_params << params[:start_date]
+    end
+
+    if params[:end_date].present?
+      sql += " AND expense_date <= ?"
+      query_params << params[:end_date]
+    end
+
+    if params[:category_id].present?
+      sql += " AND category_id = ?"
+      query_params << params[:category_id]
+    end
+
+    # Execute the query
+    @expenses = Expense.find_by_sql([ sql, *query_params ])
+
+    # Calculate statistics using raw SQL
+    total_expenses = Expense.find_by_sql([ "SELECT SUM(amount) AS total_expenses FROM expenses WHERE 1=1" + build_conditions(query_params), *query_params ]).first.total_expenses
+    average_expense = Expense.find_by_sql([ "SELECT AVG(amount) AS average_expense FROM expenses WHERE 1=1" + build_conditions(query_params), *query_params ]).first.average_expense || 0
+    total_count = Expense.find_by_sql([ "SELECT COUNT(*) AS total_count FROM expenses WHERE 1=1" + build_conditions(query_params), *query_params ]).first.total_count
 
     @stats = {
       total_expenses: total_expenses,
       average_expense: average_expense,
       total_count: total_count
     }
+  end
+
+  # Helper method to build condition string for the statistics queries
+  def build_conditions(query_params)
+    conditions = []
+    conditions << " AND expense_date >= ?" if params[:start_date].present?
+    conditions << " AND expense_date <= ?" if params[:end_date].present?
+    conditions << " AND category_id = ?" if params[:category_id].present?
+    conditions.join(" ")
   end
 
   private
