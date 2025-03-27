@@ -1,0 +1,55 @@
+<h1>Expense Report</h1>
+
+<%= form_with url: report_expenses_path, method: :get, local: true do %>
+  <div>
+    <label>Start Date:</label>
+    <%= date_field_tag :start_date, params[:start_date] %>
+  </div>
+
+  <div>
+    <label>End Date:</label>
+    <%= date_field_tag :end_date, params[:end_date] %>
+  </div>
+
+  <div>
+    <label>Category:</label>
+    <%= select_tag :category_id, options_from_collection_for_select(@categories, :id, :name, params[:category_id]), include_blank: "All Categories" %>
+  </div>
+
+  <br>
+
+  <%= submit_tag "Generate Report" %>
+<% end %>
+
+<h2>Expense List</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Description</th>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @expenses.each do |expense| %>
+      <tr>
+        <td><%= expense.id %></td>
+        <td><%= expense.description %></td>
+        <td><%= number_to_currency(expense.amount) %></td>
+        <td><%= expense.expense_date %></td>
+        <td><%= expense.category.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Report Summary</h2>
+<div>
+  <p><strong>Total Expenses:</strong> <%= number_to_currency(@stats[:total_expenses]) %></p>
+  <p><strong>Average Expense:</strong> <%= number_to_currency(@stats[:average_expense]) %></p>
+  <p><strong>Total Transactions:</strong> <%= @stats[:total_count] %></p>
+</div>
+
+<%= link_to "Back", expenses_path %>

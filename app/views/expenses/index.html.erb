@@ -1,7 +1,11 @@
 <h1>Expense Tracker</h1>
 
-<%= link_to "New expense", new_expense_path %>
-<%= link_to "New category", new_category_path %>
+<div>
+  <%= link_to "New expense", new_expense_path %>
+  <%= link_to "New category", new_category_path %>
+</div>
+
+<br>
 
 <table>
   <thead>
@@ -9,7 +13,9 @@
       <th>ID</th>
       <th>Description</th>
       <th>Amount</th>
-      <th>Date</th>
+      <th>
+        <%= link_to "Date", expenses_path(sort: params[:sort] == "asc" ? "desc" : "asc") %>
+      </th>
       <th>Category</th>
     </tr>
   </thead>
@@ -25,3 +31,9 @@
     <% end %>
   </tbody>
 </table>
+
+<br>
+
+<div>
+  <%= link_to "Generate Report", report_expenses_path %>
+</div>

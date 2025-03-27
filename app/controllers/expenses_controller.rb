@@ -3,6 +3,11 @@ class ExpensesController < ApplicationController
 
   def index
     @expenses = Expense.all
+    if params[:sort].present?
+      @expenses = @expenses.order(expense_date: params[:sort] == "asc" ? :asc : :desc)
+    else
+      @expenses = @expenses.order(:id)
+    end
   end
 
   def show
@@ -35,6 +40,27 @@ class ExpensesController < ApplicationController
   def destroy
     @expense.destroy
     redirect_to expenses_path
+  end
+
+  def report
+    @categories = Category.all
+
+    # Filtering logic
+    @expenses = Expense.all
+    @expenses = @expenses.where("expense_date >= ?", params[:start_date]) if params[:start_date].present?
+    @expenses = @expenses.where("expense_date <= ?", params[:end_date]) if params[:end_date].present?
+    @expenses = @expenses.where(category_id: params[:category_id]) if params[:category_id].present?
+
+    # Calculate statistics
+    total_expenses = @expenses.sum(:amount)
+    average_expense = @expenses.average(:amount) || 0
+    total_count = @expenses.count
+
+    @stats = {
+      total_expenses: total_expenses,
+      average_expense: average_expense,
+      total_count: total_count
+    }
   end
 
   private
