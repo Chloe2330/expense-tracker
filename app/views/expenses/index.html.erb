@@ -3,6 +3,7 @@
 <div>
   <%= link_to "New expense", new_expense_path %>
   <%= link_to "New category", new_category_path %>
+  <%= link_to "View all categories", categories_path %>
 </div>
 
 <br>
@@ -26,7 +27,7 @@
         <td><%= expense.description %></td>
         <td><%= number_to_currency(expense.amount) %></td>
         <td><%= expense.expense_date %></td>
-        <td><%= link_to expense.category.name, expense.category %></td>
+        <td><%= expense.category.name %></td>
       </tr>
     <% end %>
   </tbody>

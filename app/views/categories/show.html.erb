@@ -1,4 +1,16 @@
 <h1><%= @category.name %></h1>
-<%= @category.description.presence || "No description added." %>
 
-<%= link_to "Back", expenses_path %>
+<div>
+    <%= @category.description.presence || "No description added." %>
+</div>
+
+<br>
+
+<div>
+    <%= link_to "Back", categories_path %>
+    <%= link_to "Edit", edit_category_path(@category) %>
+</div>
+
+<br>
+
+<%= button_to "Delete", @category, method: :delete, data: { turbo_confirm: "Are you sure?" } %>
