@@ -4,7 +4,7 @@ class CategoriesController < ApplicationController
     def index
       @categories = Category.all
     end
-    
+
     def show
     end
 
@@ -23,7 +23,7 @@ class CategoriesController < ApplicationController
 
     def edit
     end
-  
+
     def update
       if @category.update(category_params)
         redirect_to @category
@@ -35,9 +35,9 @@ class CategoriesController < ApplicationController
     def destroy
       begin
         @category.destroy
-        redirect_to categories_path, notice: 'Category was successfully deleted.'
+        redirect_to categories_path, notice: "Category was successfully deleted."
       rescue ActiveRecord::InvalidForeignKey
-        redirect_to categories_path, alert: 'Category cannot be deleted because it is referenced by an expense.'
+        redirect_to categories_path, alert: "Category cannot be deleted because it is referenced by an expense."
       end
     end
 
