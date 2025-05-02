@@ -1,24 +1,20 @@
-# README
+# Expense Tracker 
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A simple Rails application for tracking personal expenses.
 
-Things you may want to cover:
+## Features
+- Add, edit, delete expenses
+- Categorize expenses
+- Filter and report by date range and category
+- View summary statistics (total, average, count)
 
-* Ruby version
+## Indexes
+- Primary key index on `expenses.id` and `categories.id`
+- Index on `expenses.category_id` (foreign key)
+- Index on `expenses.expense_date` for date-range filtering
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Usage
+```bash
+bundle install
+rails db:setup
+rails server
