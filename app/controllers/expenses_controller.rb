@@ -30,7 +30,7 @@ class ExpensesController < ApplicationController
   end
 
   def update
-    begin 
+    begin
       if @expense.update(expense_params)
         redirect_to @expense
       else
