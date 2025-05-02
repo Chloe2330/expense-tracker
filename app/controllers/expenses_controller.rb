@@ -30,10 +30,15 @@ class ExpensesController < ApplicationController
   end
 
   def update
-    if @expense.update(expense_params)
-      redirect_to @expense
-    else
-      render :edit, status: :unprocessable_entity
+    begin 
+      if @expense.update(expense_params)
+        redirect_to @expense
+      else
+        render :edit, status: :unprocessable_entity
+      end
+    rescue ActiveRecord::StaleObjectError
+      flash.now[:alert] = "This expense was modified by someone else while you were editing. Please review the changes and try again."
+      render :edit, status: :conflict
     end
   end
 
@@ -96,6 +101,6 @@ class ExpensesController < ApplicationController
 
   private
     def expense_params
-      params.require(:expense).permit(:description, :amount, :expense_date, :category_id)
+      params.require(:expense).permit(:description, :amount, :expense_date, :category_id, :lock_version)
     end
 end
